@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>
+				 <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">ID</a>
+			</th>
+			<th>
+				<a th:href="@{'/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}">Name</a>
+			</th>
+			<th>
+				<a th:href="@{'/page/' + ${currentPage} + '?sortField=address&sortDir=' + ${reverseSortDir}}">Address</a>
+			</th>
+		</tr>
+		<tbody id="dropDown">
+				<th:block th:each="list:${listProducts}">
+				<tr>
+					<td>[[${list.id}]]</td>
+					<td>[[${list.name}]]</td>
+					<td>[[${list.address}]]</td>
+					<td>abc</td>
+					<td>
+						<a th:href="@{'/user/edit/'+${list.id}}">Edit</a>						
+					</td>
+				</tr>
+			</th:block>
+		</tbody>	
+	</table>
+<div><i>Sorted by [[${sortField}]] in [[${sortDir}]] order</i></div>
+
+
+
+
+
+	<a th:if="${currentPage > 1}" th:href="@{'/page/1'+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
+	<span th:unless="${currentPage > 1}">First</span>
+	
+	<a th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+	<span th:unless="${currentPage > 1}">Previous</span>
+	
+	
+	<th:block th:if="${totalPage > 10}">
+		<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+	    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}
+	    }">[[${i}]]</a>
+	    <span th:unless="${currentPage != i}">[[${i}]]</span>
+	    &nbsp;
+		</span>
+	</th:block>
+	<th:block th:if="${totalPage < 11}">
+		<th:block th:if="${currentPage <=10 || currentPage > totalPages-11}">
+			<span th:each="i: ${#numbers.sequence(1,10)}">
+		    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}
+		    }">[[${i}]]</a>
+		    <span th:unless="${currentPage != i}">[[${i}]]</span>&nbsp;</span>
+			
+			
+			<a th:href="@{'/page/'+11+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">....</a>
+			
+			
+			<span th:each="i: ${#numbers.sequence(totalPages-10,totalPages)}">
+		    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}
+		    }">[[${i}]]</a>
+		    <span th:unless="${currentPage != i}">[[${i}]]</span>&nbsp;</span>
+		</th:block>
+		
+		<th:block th:if="${currentPage > 10 && currentPage < totalPages-11}">
+			<a th:href="@{'/page/'+${currentPage-10}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">....</a>
+			
+			<span th:each="i: ${#numbers.sequence(currentPage-5,currentPage+5)}">
+		    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}
+		    }">[[${i}]]</a>
+		    <span th:unless="${currentPage != i}">[[${i}]]</span>&nbsp;</span>
+			
+			<a th:href="@{'/page/'+${currentPage+10}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">....</a>
+		</th:block>
+	</th:block>
+	
+	
+	<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+	<span th:unless="${currentPage < totalPages}">Next</span>
+	
+	<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+	<span th:unless="${currentPage < totalPages}">Last</span>
+	
+</body>
+</html>
